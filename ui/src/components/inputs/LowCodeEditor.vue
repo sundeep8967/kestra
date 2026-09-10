@@ -621,7 +621,6 @@
 
     const emit = defineEmits([
         "follow",
-        "on-edit",
         "loading",
         "expand-subflow",
     ])
@@ -749,7 +748,7 @@
     }
 
     const onDelete = (event: any) => {
-        const flowParsed = YAML_UTILS.parse(props.source)
+        const flowParsed = YAML_UTILS.parse(flowSource.value)
         toast.confirm(
             t("delete task confirm", {taskId: event.id}),
             async () => {
@@ -769,7 +768,7 @@
                 const taskType = flowParsed.tasks.find((e: any) => e.id === event.id)?.type as string | undefined
                 deleteWithUndo(event.id, () => {
                     const updatedYmlSource = YAML_UTILS.deleteBlock({
-                        source: props.source ?? "",
+                        source: flowSource.value ?? "",
                         section,
                         key: event.id,
                     })
@@ -786,7 +785,7 @@
 
     const onCreateNewTask = (event: [string, "before" | "after"]) => {
         const [taskId, position] = event
-        const target = resolveTaskInsertionTarget(props.source ?? "", "tasks", taskId)
+        const target = resolveTaskInsertionTarget(flowSource.value ?? "", "tasks", taskId)
         if (!target) return
         taskPicker.openTaskPickerAtPath(target.parentPath, target.refIndex, undefined, position)
     }
@@ -796,7 +795,7 @@
         section?: string;
     }) => {
         const section = (event.section ?? SECTIONS.TASKS).toLowerCase() as BlockSection
-        const target = resolveTaskInsertionTarget(props.source ?? "", section, event.task.id)
+        const target = resolveTaskInsertionTarget(flowSource.value ?? "", section, event.task.id)
         if (!target) return
         pushModalTarget({
             parentPath: target.parentPath,
@@ -875,12 +874,12 @@
             })
         },
         sectionList: (section) => {
-            const list = YAML_UTILS.parse<Record<string, any>>(props.source ?? "")?.[section]
+            const list = YAML_UTILS.parse<Record<string, any>>(flowSource.value ?? "")?.[section]
             return Array.isArray(list) ? list : []
         },
         sectionDisplayLabel: (section) => sectionDisplayLabel(t, section),
         laneDisplayLabel: (parentPath) => laneDisplayLabelFromPath(t, parentPath),
-        flowYaml: computed(() => props.source ?? ""),
+        flowYaml: computed(() => flowSource.value ?? ""),
         applyYaml: applyGraphYaml,
         surface: "topology",
     })
