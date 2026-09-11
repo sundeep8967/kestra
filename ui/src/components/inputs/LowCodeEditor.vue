@@ -282,7 +282,7 @@
     const route = useRoute()
 
     const vueflowId = ref(Math.random().toString())
-    const {fitView, setMinZoom} = useVueFlow(vueflowId.value)
+    const {setMinZoom} = useVueFlow(vueflowId.value)
 
     const topologyClick = inject(TOPOLOGY_CLICK_INJECTION_KEY, ref())
 
@@ -610,11 +610,9 @@
     watch(() => props.horizontalDefault, (value) => {
         if (value !== undefined && value !== isHorizontal.value) {
             isHorizontal.value = value
-            fitViewOrientation()
         }
     })
     const vueFlow = ref<HTMLDivElement>()
-    const timer = ref<ReturnType<typeof setTimeout>>()
     const logFilter = ref("")
     const logLevel = ref(localStorage.getItem("defaultLogLevel") || "INFO")
     const isDrawerOpen = ref(false)
@@ -645,8 +643,6 @@
     )
 
     onMounted(() => {
-        // Regenerate graph on window resize
-        observeWidth()
         pluginsStore.fetchIcons()
         setMinZoom(0.1)
     })
@@ -676,20 +672,6 @@
             }
         },
     )
-
-    const observeWidth = () => {
-        if(vueFlow.value){
-            const resizeObserver = new ResizeObserver(function () {
-                clearTimeout(timer.value)
-                timer.value = setTimeout(() => {
-                    nextTick(() => {
-                        fitView()
-                    })
-                }, 50) as any
-            })
-            resizeObserver.observe(vueFlow.value)
-        }
-    }
 
     const onDelete = (event: any) => {
         const flowParsed = YAML_UTILS.parse(props.source)
@@ -795,22 +777,9 @@
         taskPicker.openTaskPickerAtPath(target.parentPath, target.refIndex)
     }
 
-    const fitViewOrientation = () => {
-        if(vueFlow.value){
-            const resizeObserver = new ResizeObserver(() => {
-                clearTimeout(timer.value)
-                nextTick(() => {
-                    fitView()
-                })
-            })
-            resizeObserver.observe(vueFlow.value)
-        }
-    }
-
     const toggleOrientation = () => {
         isHorizontal.value = !isHorizontal.value
         isHorizontalLS.value = isHorizontal.value
-        fitViewOrientation()
     }
 
     const openFlow = (data: any) => {
