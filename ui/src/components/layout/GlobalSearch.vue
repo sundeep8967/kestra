@@ -173,7 +173,10 @@
         const entries = buildEntries(root, [], 0, order)
 
         // Ensure "Flows / Source search" is directly discoverable from Jump to when not scoped into a non-workspace section
-        if (scopeStack.value.length === 0 || scopeStack.value.some((s) => s.title.toLowerCase() === "workspace")) {
+        if (
+            scopeStack.value.length === 0 ||
+            scopeStack.value.some((s) => s.title.toLowerCase() === "workspace" || s.title.toLowerCase() === t("workspace").toLowerCase())
+        ) {
             entries.push({
                 kind: "link",
                 title: t("source search"),
@@ -257,7 +260,8 @@
                 return href.path
             }
             if ("name" in href && href.name != null) {
-                return `name:${String(href.name)}`
+                const query = "query" in href && href.query ? `?${JSON.stringify(href.query)}` : ""
+                return `name:${String(href.name)}${query}`
             }
         }
 

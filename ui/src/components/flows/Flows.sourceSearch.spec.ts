@@ -55,6 +55,11 @@ describe("Flows source search row", () => {
             global: {
                 stubs: {
                     KsDataTable: {template: "<div><slot name=\"top\" /><slot /></div>"},
+                    KsFilter: defineComponent({
+                        name: "KsFilter",
+                        props: ["prefix"],
+                        template: "<div />",
+                    }),
                     RouterLink: RouterLinkStub,
                 },
             },
@@ -82,6 +87,11 @@ describe("Flows source search row", () => {
             global: {
                 stubs: {
                     KsDataTable: {template: "<div><slot name=\"top\" /><slot /></div>"},
+                    KsFilter: defineComponent({
+                        name: "KsFilter",
+                        props: ["prefix"],
+                        template: "<div />",
+                    }),
                     RouterLink: RouterLinkStub,
                 },
             },
@@ -116,6 +126,11 @@ describe("Flows source search row", () => {
             global: {
                 stubs: {
                     KsDataTable: {template: "<div><slot name=\"top\" /><slot /></div>"},
+                    KsFilter: defineComponent({
+                        name: "KsFilter",
+                        props: ["prefix"],
+                        template: "<div />",
+                    }),
                     RouterLink: RouterLinkStub,
                 },
             },

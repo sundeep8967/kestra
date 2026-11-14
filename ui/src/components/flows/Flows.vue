@@ -517,7 +517,7 @@
     const canExecute = (flow: Flow) => flow && !flow.deleted && user?.value?.isAllowed(resource.FLOW, action.EXECUTE, flow.namespace)
 
     const searchQuery = computed(() => {
-        const decoded = decodeSearchParams(route.query).find((p) => p.field === "q")?.value
+        const decoded = decodeSearchParams(route.query).find((p) => p.field === "q")?.value ?? (route.query.q as string | undefined)
         if (!decoded) {
             return ""
         }
