@@ -1023,9 +1023,9 @@ public class ExecutorService {
             outputs.put(Loop.RUNNING_ITERATIONS_OUTPUT, init.limit());
             outputs.put(Loop.TERMINATED_ITERATIONS_OUTPUT, HashMap.newHashMap(6));
             outputs.put(Loop.NEXT_OFFSET_OUTPUT, init.nextOffset());
-            Optional.ofNullable(loop.getOutputs())
-                .filter(o -> o.size() > 0)
-                .ifPresent(o -> outputs.put(Loop.OUTPUTS_OUTPUT, Collections.emptyList()));
+            if (!ListUtils.isEmpty(loop.getOutputs())) {
+                outputs.put(Loop.OUTPUTS_OUTPUT, Collections.emptyList());
+            }
             taskOutputService.saveOutputs(taskRun, outputs);
             for (int i = 0; i < init.values().size(); i++) {
                 var loopExecution = executor.getExecution().loopExecution(taskRun, i, null, init.values().get(i), loop.getParseValues());
@@ -1039,9 +1039,9 @@ public class ExecutorService {
             outputs.put(Loop.ITERATION_COUNT_OUTPUT, iterationCount);
             outputs.put(Loop.RUNNING_ITERATIONS_OUTPUT, init.limit());
             outputs.put(Loop.TERMINATED_ITERATIONS_OUTPUT, HashMap.newHashMap(6));
-            Optional.ofNullable(loop.getOutputs())
-                .filter(o -> o.size() > 0)
-                .ifPresent(o -> outputs.put(Loop.OUTPUTS_OUTPUT, Collections.emptyList()));
+            if (!ListUtils.isEmpty(loop.getOutputs())) {
+                outputs.put(Loop.OUTPUTS_OUTPUT, Collections.emptyList());
+            }
             taskOutputService.saveOutputs(taskRun, outputs);
 
             if (iterationCount > 0) {
